@@ -19,6 +19,12 @@ bl_info = {
 
 #init props
 class MyInputs(PropertyGroup):
+    armaturename:bpy.props.StringProperty(
+        name="Armature_Name",
+        subtype="ARMATURE NAME",
+        defaule="Armature"
+    )
+
     deselectall:bpy.props.BoolProperty(
         name="deselect_all",
         default=False
@@ -34,6 +40,7 @@ class MainPanel(Panel):
 
     def draw(self, context):
         layout = self.layout
+        layout.prop(context.scene.myinputs,"armaturename")
         layout.prop(context.scene.myinputs,"deselectall")
         layout.operator(BONE_Selector.bl_idname, text="select")
 
@@ -43,6 +50,7 @@ class BONE_Selector(Operator):
     bl_label = "Select"
     
     def execute(self, context):
+        root_name = context.scene.myinputs.armaturename
         vertex_groups = []
 
         selected_objects = bpy.context.selected_objects
@@ -51,7 +59,7 @@ class BONE_Selector(Operator):
             vertex_groups.append(selected_object.vertex_groups)
 
         if context.scene.myinputs.deselectall:
-            for bone in bpy.data.objects['Armature'].data.bones:
+            for bone in bpy.data.objects[root_name].data.bones:
                 bone.select = False
                 bone.select_head = False
                 bone.select_tail = False
@@ -59,7 +67,7 @@ class BONE_Selector(Operator):
         for v_groups in vertex_groups:
             for v_group in v_groups:
                 print(v_group.name)
-                bone = bpy.data.objects['Armature'].data.bones[v_group.name]
+                bone = bpy.data.objects[root_name].data.bones[v_group.name]
                 bone.select = True
                 bone.select_head = True
                 bone.select_tail = True
