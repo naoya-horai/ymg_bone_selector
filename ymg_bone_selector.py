@@ -29,7 +29,7 @@ class MainPanel(Panel):
     bl_label = "ymg_bone_selector"
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
-    bl_category = "ymgaddon"
+    bl_category = "ymgselector"
 
 
     def draw(self, context):
